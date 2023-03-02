@@ -1,0 +1,16 @@
+#grid {
+    display: grid;
+    gap: 1px;
+    border: 1px solid black;
+}
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 1px solid black;
+}
+.cell {
+    background-position: center;
+    background-size: cover;
+}
