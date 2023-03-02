@@ -55,7 +55,7 @@ for (let row = 0; row < rows; row++) {
 
                 if (this.revealed) return;
 
-                if (this.bomb) this.element.style.backgroundImage = "url('Bomb.png')";
+                if (this.bomb) this.element.style.backgroundImage = "url('images/Bomb.png')";
                 else if (this.getMyNumber() === 0) {
                     this.element.innerHTML = this.getMyNumber();
                     this.revealed = true;
@@ -82,6 +82,7 @@ for (let row = 0; row < rows; row++) {
                 }
                 else {
                     this.element.innerHTML = this.getMyNumber();
+
                 }
             }
         };
@@ -109,6 +110,8 @@ let ersterKlick = true;
 arr.forEach(element => {
     element.addEventListener("click", ()=> {
 
+        let clickedCell = grid[element.dataset.row][element.dataset.col];
+
         if (ersterKlick) {
             // Generiere Bomben
             let erstBomben = 0;
@@ -128,23 +131,21 @@ arr.forEach(element => {
             ersterKlick = false;
         }
 
-        grid[element.dataset.row][element.dataset.col].reveal();
+        //Wenn eine Bombe gecklickt wird
+        if (clickedCell.bomb) openPopup();
+
+        clickedCell.reveal();
 
     })
 
-/*
-    // Dev Tools
-    let dev = prompt("Dev?") === "dev";
+    let gewonnen = true;
 
-    if (dev) {
-        arr.forEach(element => {
-            if (grid[element.dataset.row][element.dataset.col].bomb){
-                element.style.backgroundColor = 'red';
-            }})
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < columns; col++) {
+            if (!grid[row][col].bomb && !grid[row][col].revealed) gewonnen = false
+        }
     }
 
-
- */
-
+    if (gewonnen) prompt("Gewonnen!")
 
 })
