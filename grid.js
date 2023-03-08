@@ -11,6 +11,22 @@ document.body.appendChild(meinGrid);
 
 const grid = [];
 
+function machDenErstenKlick(element) {
+    let erstBomben = 0;
+    while (erstBomben < anzahlBomben) {
+        let randRow = Math.floor(Math.random() * rows);
+        let randCol = Math.floor(Math.random() * columns);
+        if (!grid[randRow][randCol].bomb &&
+            Math.abs(randRow - element.dataset.row) > 1 &&
+            Math.abs(randCol - element.dataset.col) > 1) {
+            grid[randRow][randCol].bomb = true;
+            //grid[randRow][randCol].element.style.backgroundColor = 'red';
+            erstBomben++;
+        }
+        //grid[element.dataset.row][element.dataset.col].reveal();
+    }
+}
+
 for (let row = 0; row < rows; row++) {
     grid[row] = [];
     for (let col = 0; col < columns; col++) {
@@ -114,20 +130,7 @@ arr.forEach(element => {
 
         if (ersterKlick) {
             // Generiere Bomben
-            let erstBomben = 0;
-            while (erstBomben < anzahlBomben) {
-                let randRow = Math.floor(Math.random() * rows);
-                let randCol = Math.floor(Math.random() * columns);
-                if (!grid[randRow][randCol].bomb &&
-                    Math.abs(randRow - element.dataset.row) > 1 &&
-                    Math.abs(randCol - element.dataset.col) > 1) {
-                    grid[randRow][randCol].bomb = true;
-                    //grid[randRow][randCol].element.style.backgroundColor = 'red';
-                    erstBomben++;
-                }
-                //grid[element.dataset.row][element.dataset.col].reveal();
-
-            }
+            machDenErstenKlick(element)
             ersterKlick = false;
         }
 
@@ -138,6 +141,8 @@ arr.forEach(element => {
 
     })
 
+    /*
+
     let gewonnen = true;
 
     for (let row = 0; row < rows; row++) {
@@ -147,5 +152,7 @@ arr.forEach(element => {
     }
 
     if (gewonnen) prompt("Gewonnen!")
+
+    */
 
 })
