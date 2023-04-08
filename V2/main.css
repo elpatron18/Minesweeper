@@ -20,7 +20,7 @@ body {
     gap: 0px;
     border: 1px solid lightgray;
 }
-.cell {
+.zelle {
     display: flex;
     justify-content: center;
     align-items: center;

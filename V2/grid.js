@@ -4,41 +4,55 @@ const anzahlBomben = 10;
 
 const meinGrid = document.getElementById('grid')
 
-meinGrid.style.gridTemplateColumns = `repeat(${columns}, 50px`;
-meinGrid.style.gridTemplateRows = `repeat(${rows}, 50px`;
+meinGrid.style.gridTemplateRows = `repeat(${zeilenAnzahl}, 50px)`;
+meinGrid.style.gridTemplateColumns = `repeat(${spaltenAnzahl}, 50px)`;
 
 document.body.appendChild(meinGrid);
 
-class Zelle {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.bombe = false;
-        this.umkreis = null;
-    }
-}
+document.addEventListener('DOMContentLoaded', () => {
 
-function erstelleKarte() {
-    // erstelle ein leeres 2D-Array
-    let karte = new Array(zeilenAnzahl);
-    for (let i = 0; i < spaltenAnzahl; i++) {
-        karte[i] = new Array(zeilenAnzahl);
-        for (let j = 0; j < spaltenAnzahl; j++) {
-            karte[i][j] = new Zelle(j, i);
+    class Zelle {
+        constructor(zeile, spalte) {
+            this.zeile = zeile;
+            this.spalte = spalte;
+            this.bombe = false;
+            this.umkreis = null;
+
+            // Erstelle eine neue Div
+            this.div = document.createElement('div');
+
+            // Füge eine CSS-Klasse hinzu, um das Aussehen der Div zu stylen
+            this.div.classList.add('zelle');
+
+            // Setze eine ID für die Div, um sie später identifizieren zu können
+            this.div.id = `zelle-${zeile}-${spalte}`;
+
+            meinGrid.appendChild(this.div)
         }
     }
 
-    //Bomben erstellen
-    let bomben = 0;
-    while (bomben < anzahlBomben) {
-        let b = Math.floor(Math.random() * breite);
-        let h = Math.floor(Math.random() * hoehe);
-
-        if (!karte[h][b].bombe) {
-            karte[h][b].bombe = true;
-            bomben++;
+    function erstelleKarte() {
+        // erstelle ein leeres 2D-Array
+        let karte = new Array(zeilenAnzahl);
+        for (let z = 0; i < zeilenAnzahl; i++) {
+            karte[z] = new Array(spaltenAnzahl);
+            for (let s = 0; s < spaltenAnzahl; s++) {
+                karte[z][s] = new Zelle(z, s);
+            }
         }
-    }
-    return karte;
-}
 
+        //Bomben erstellen
+        let bomben = 0;
+        while (bomben < anzahlBomben) {
+            let b = Math.floor(Math.random() * breite);
+            let h = Math.floor(Math.random() * hoehe);
+
+            if (!karte[h][b].bombe) {
+                karte[h][b].bombe = true;
+                bomben++;
+            }
+        }
+        return karte;
+    }
+
+})
