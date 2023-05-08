@@ -67,3 +67,11 @@ body {
 
     cursor: pointer;
 }
+
+.zero {
+    background-color: lightgray;
+}
+
+.bombe {
+    background-image: url('images/Bomb.png');
+}

@@ -44,12 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
         aufdecken() {
             if (!this.visible) this.visible = true;
 
-            if (this.bombe) this.div.style.backgroundImage = "url('images/Bomb.png')";
+            if (this.bombe) {
+                this.div.classList.add("bombe")
+            }
              else {
                 // Wenn null ist deck alle Werte drum rum auf
                 // Wenn != 0 dann zeige die Zahl an
                     if (this.umkreisZahl === 0) {
-                        this.div.style.backgroundColor = "lightgrey";
+                        this.div.classList.add("zero")
                         this.visible = true;
                         this.getMyUmfeld().forEach(element => {
                             if (!element.visible) element.aufdecken();
