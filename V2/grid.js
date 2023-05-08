@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         aufdecken() {
+
+            this.updateZahl()
+
             if (this.visible === Sichtbarkeit.VERDECKT)
                 this.visible = Sichtbarkeit.AUFGEDECKT;
 
@@ -106,20 +109,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 karte[z][s] = new Zelle(z, s);
             }
         }
-
-        // Bomben erstellen
-        let bomben = 0;
-        while (bomben < anzahlBomben) {
-            let b = Math.floor(Math.random() * spaltenAnzahl);
-            let h = Math.floor(Math.random() * zeilenAnzahl);
-
-            if (!karte[h][b].bombe) {
-                karte[h][b].bombe = true;
-                bomben++;
-            }
-        }
         return karte;
     }
+
+    function erstellBomben(s) {
+        let bomben = 0;
+
+        while (bomben < anzahlBomben) {
+            let randRow = Math.floor(Math.random() * zeilenAnzahl);
+            let randCol = Math.floor(Math.random() * spaltenAnzahl);
+
+            let drin = false;
+
+            s.getMyUmfeld().forEach((element) => {
+                if (element.zeile === randRow && element.spalte === randCol)
+                    drin = true;
+            })
+
+            if (!karte[randRow][randCol].bombe && !drin) {
+                karte[randRow][randCol].bombe = true;
+                bomben++;
+            }
+
+        }
+    }
+
     function checkGewinn() {
         let gewonnen = true;
         karte.forEach((z) => z.forEach((s) => {
@@ -132,14 +146,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Hier Gehts Los
     let karte = erstelleKarte();
 
     karte.forEach((z) => z.forEach((s) => s.updateZahl()))
 
     const flaggeSlider = document.querySelector('#werkzeug input');
+    let ersterKlick = true;
     karte.forEach((z) => z.forEach((s) => {
         s.div.addEventListener("click", () => {
+            if (ersterKlick) {
+                erstellBomben(s)
+                ersterKlick = false;
+
+                s.aufdecken()
+                return
+            }
+
             if (flaggeSlider.checked) {
                 console.log("Flagge")
                 s.div.classList.toggle("flagge")

@@ -19,9 +19,9 @@ function machDenErstenKlick(element) {
         if (!grid[randRow][randCol].bomb &&
             Math.abs(randRow - element.dataset.row) > 1 &&
             Math.abs(randCol - element.dataset.col) > 1) {
-            grid[randRow][randCol].bomb = true;
+                grid[randRow][randCol].bomb = true;
             //grid[randRow][randCol].element.style.backgroundColor = 'red';
-            erstBomben++;
+                erstBomben++;
         }
         //grid[element.dataset.row][element.dataset.col].reveal();
     }
