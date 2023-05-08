@@ -75,3 +75,7 @@ body {
 .bombe {
     background-image: url('images/Bomb.png');
 }
+
+.flagge {
+    background-image: url("images/Flagge.png");
+}

@@ -11,12 +11,18 @@ document.body.appendChild(meinGrid);
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    const Sichtbarkeit = {
+        AUFGEDECKT: 0,
+        VERDECKT: 1,
+        FLAGGE: 2
+    };
+
     class Zelle {
         constructor(zeile, spalte) {
             this.zeile = zeile;
             this.spalte = spalte;
             this.bombe = false;
-            this.visible = false;
+            this.visible = Sichtbarkeit.VERDECKT;
             this.umkreisZahl = null;
 
             // Erstelle eine neue Div
@@ -42,7 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         aufdecken() {
-            if (!this.visible) this.visible = true;
+            if (this.visible === Sichtbarkeit.VERDECKT)
+                this.visible = Sichtbarkeit.AUFGEDECKT;
 
             if (this.bombe) {
                 this.div.classList.add("bombe")
@@ -52,14 +59,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Wenn != 0 dann zeige die Zahl an
                     if (this.umkreisZahl === 0) {
                         this.div.classList.add("zero")
-                        this.visible = true;
+                        this.visible = Sichtbarkeit.AUFGEDECKT;
                         this.getMyUmfeld().forEach(element => {
-                            if (!element.visible) element.aufdecken();
+                            if (element.visible === Sichtbarkeit.VERDECKT)
+                                element.aufdecken();
                         })
                     }
                     else {
                         this.div.innerHTML = this.umkreisZahl;
-                        this.visible = true;
+                        this.visible = Sichtbarkeit.AUFGEDECKT;
                     }
             }
         }
@@ -89,9 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     }
-
-
-
     function erstelleKarte() {
         // erstelle ein leeres 2D-Array
         let karte = new Array(zeilenAnzahl);
@@ -115,14 +120,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return karte;
     }
+    function checkGewinn() {
+        let gewonnen = true;
+        karte.forEach((z) => z.forEach((s) => {
+            if (s.visible !== Sichtbarkeit.FLAGGE && s.bombe) {
+                gewonnen = false;
+            }
+        }));
+        if (gewonnen) {
+            alert("Gewonnen!")
+        }
+    }
+
+    // Hier Gehts Los
     let karte = erstelleKarte();
 
     karte.forEach((z) => z.forEach((s) => s.updateZahl()))
 
+    const flaggeSlider = document.querySelector('#werkzeug input');
     karte.forEach((z) => z.forEach((s) => {
         s.div.addEventListener("click", () => {
-            s.aufdecken();
+            if (flaggeSlider.checked) {
+                console.log("Flagge")
+                s.div.classList.toggle("flagge")
+                s.visible = Sichtbarkeit.FLAGGE;
+                checkGewinn()
+            } else {
+                console.log("Schaufel")
+                s.aufdecken()
+                if (s.bombe) alert("Verloren")
+            }
         });
+        s.div.addEventListener('contextmenu', (event) => {
+
+            event.preventDefault()
+
+            console.log("Flagge")
+            s.div.classList.toggle("flagge")
+            s.visible = Sichtbarkeit.FLAGGE;
+            checkGewinn()
+        })
     }));
 
 
